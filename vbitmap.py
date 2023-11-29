@@ -1,5 +1,6 @@
 import math
 import random
+import matplotlib.pyplot as plt
 '''
     This script implements a 
 '''
@@ -9,11 +10,11 @@ class VirtualBitmapSketch:
         self.num_v_bits = num_v_bits
         self.bitmap = [0] * num_bits
         self.virtual_bitmaps = [[0] * num_v_bits for _ in range(num_flows)]
-        self.hash_fn = 37 #random.randint(1000000,10000000) #random.sample(range(1, 1000000000), num_v_bits)
+        self.hash_fn = 37 #We will choose a prime number for our hash function
 
     # Update the physical bitmap according to the flow_id
     # Update the virtual bitmap by recording unique(random) flows
-    def update(self,flow_index, flow_id, num_flows):
+    def update(self, flow_index, flow_id, num_flows):
         id_parts = str(flow_id).split('.')
         flow_id_to_hash = int(id_parts[0] + id_parts[1] + id_parts[2] + id_parts[3])
 
@@ -66,11 +67,23 @@ if __name__ == '__main__':
         vms.update(index, flow_id, num_flows)
         index+=1
         
+    estimated = []
+    actual = []
     index = 0
     for flow_id, num_flows in flows:
         val = vms.estimate_spread(index)
-        print(val, num_flows)
+        actual.append(num_flows)
+        estimated.append(val)
         index+=1
+        
+    #Plot graph using matplotlib
+    plt.scatter(actual, estimated, color='blue', marker = '+', s = 20)
+    plt.xlim([0, 500])
+    plt.ylim([0, 700])
+    plt.xlabel("actual spread", fontsize=15)
+    plt.ylabel("estimated spread", fontsize=15)
+    plt.savefig("flow_spread.png")
+    plt.close()
 
     #Write to file
     #with open("bitmap.txt", "w") as file:
