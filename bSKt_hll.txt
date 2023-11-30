@@ -1,0 +1,26 @@
+Top 25 Estimates:
+Rank 1   Actual: 57714 Estimated: 61971.74567017418 
+Rank 2   Actual: 52238 Estimated: 56940.67645985088 
+Rank 3   Actual: 52296 Estimated: 55589.87706714935 
+Rank 4   Actual: 55453 Estimated: 50290.78005710696 
+Rank 5   Actual: 45126 Estimated: 49140.43407066791 
+Rank 6   Actual: 36234 Estimated: 37575.07982536112 
+Rank 7   Actual: 31002 Estimated: 33047.15336017507 
+Rank 8   Actual: 28522 Estimated: 31309.247618853184 
+Rank 9   Actual: 25189 Estimated: 29199.902824517856 
+Rank 10  Actual: 22182 Estimated: 23998.99519062773 
+Rank 11  Actual: 22224 Estimated: 21801.28999916171 
+Rank 12  Actual: 20095 Estimated: 17319.498558778385 
+Rank 13  Actual: 15520 Estimated: 15963.082891803886 
+Rank 14  Actual: 10601 Estimated: 11898.367789714144 
+Rank 15  Actual: 12101 Estimated: 11367.5711804042 
+Rank 16  Actual: 11114 Estimated: 11294.350648389245 
+Rank 17  Actual: 10120 Estimated: 9546.143016301052 
+Rank 18  Actual: 10393 Estimated: 8916.730647035582 
+Rank 19  Actual: 9040  Estimated: 8577.349163395897 
+Rank 20  Actual: 8822  Estimated: 7832.101204267476 
+Rank 21  Actual: 8270  Estimated: 7214.396972368571 
+Rank 22  Actual: 7810  Estimated: 6712.427734431672 
+Rank 23  Actual: 5228  Estimated: 5030.232146256672 
+Rank 24  Actual: 4370  Estimated: 4277.686555032131 
+Rank 25  Actual: 3089  Estimated: 2968.5213516174576 
