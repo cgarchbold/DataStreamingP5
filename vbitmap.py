@@ -8,39 +8,41 @@ import matplotlib.pyplot as plt
     python vbitmap.py
 '''
 class VirtualBitmapSketch:
-    def __init__(self, num_bits, num_v_bits, num_flows):
+    def __init__(self, num_bits, num_v_bits):
         self.num_bits = num_bits
         self.num_v_bits = num_v_bits
         self.bitmap = [0] * num_bits
-        #self.virtual_bitmaps = [[0] * num_v_bits for _ in range(num_flows)]
-        self.hash_fns = random.sample(range(1, 1000000000), num_v_bits) #random.randint(100000000,1000000000)
+        self.hash_fns = random.sample(range(1, 100000000000000), num_v_bits)
+        self.v_hash = 4019
 
-    # Update the physical bitmap according to the flow_id
-    # Update the virtual bitmap by recording unique(random) flows
-    def update(self, flow_index, flow_id, num_flows):
+    def update(self, flow_id, num_flows):
         id_parts = str(flow_id).split('.')
         flow_id_to_hash = int(id_parts[0] + id_parts[1] + id_parts[2] + id_parts[3])
 
         for _ in range(num_flows):
+
             element_id = random.randrange(1000000000)
-            v_hash_value = (element_id ^ self.hash_fn) % self.num_v_bits
-            #insert into the virtual bitmap
-            self.virtual_bitmaps[flow_index][v_hash_value] = 1
-            
+            virtual_hash = (element_id % self.v_hash) % self.num_v_bits
             #From the virtual bitmap insert into physical bitmap
-            p_hash_value = (flow_id_to_hash ^ self.hash_fn) % self.num_bits
+            p_hash_value = (flow_id_to_hash ^ self.hash_fns[virtual_hash]) % self.num_bits
             self.bitmap[p_hash_value] = 1
     
-    
-    def estimate_spread(self, flow_index):
-        physical_bitmap_percent_zeroes = self.bitmap.count(0) / self.num_bits
+
+    def estimate_spread(self, flow_id):
+        id_parts = str(flow_id).split('.')
+        flow_id_to_hash = int(id_parts[0] + id_parts[1] + id_parts[2] + id_parts[3])
+
+        v_bitmap = []
+        for hash in self.hash_fns:
+            v_bitmap.append(self.bitmap[(flow_id_to_hash ^ hash) % self.num_bits])
         
-        if self.virtual_bitmaps[flow_index].count(0) != 0:
-            virtual_bitmap_percent_zeroes = self.virtual_bitmaps[flow_index].count(0) / self.num_v_bits
+        if v_bitmap.count(0) == 0:
+            virtual = 1 / self.num_v_bits
         else:
-            virtual_bitmap_percent_zeroes = 1 / self.num_v_bits
+            virtual = v_bitmap.count(0) / self.num_v_bits
+        physical = self.bitmap.count(0) / self.num_bits
             
-        estimated_spread = self.num_v_bits * math.log(physical_bitmap_percent_zeroes) - self.num_v_bits * math.log(virtual_bitmap_percent_zeroes)
+        estimated_spread = self.num_v_bits * math.log(physical) - self.num_v_bits * math.log(virtual)
             
         return estimated_spread
 
@@ -61,26 +63,23 @@ if __name__ == '__main__':
                 curr_flow_count = int(curr_flow_count)
                 flows.append((flow_id, curr_flow_count))
 
-    vms = VirtualBitmapSketch(num_bits=NUM_BITS, num_v_bits=NUM_V_BITS, num_flows=num_flows)
+    vms = VirtualBitmapSketch(num_bits=NUM_BITS, num_v_bits=NUM_V_BITS)
 
     # Add flows to the sketch
-    index = 0
     for flow_id, num_flows in flows:
-        vms.update(index, flow_id, num_flows)
-        index+=1
+        vms.update( flow_id, num_flows)
     
     # Estimate spreads
     estimated = []
     actual = []
-    index = 0
     for flow_id, num_flows in flows:
-        val = vms.estimate_spread(index)
+        estimate = vms.estimate_spread(flow_id)
         actual.append(num_flows)
-        estimated.append(val)
-        index+=1
+        estimated.append(estimate)
         
     #Plot graph using matplotlib
     plt.scatter(actual, estimated, color='blue', marker = '+', s = 20)
+    plt.plot([0, 500], [0, 500], color='red', linestyle='--')
     plt.xlim([0, 500])
     plt.ylim([0, 700])
     plt.xlabel("actual spread", fontsize=15)

@@ -121,5 +121,5 @@ if __name__ == '__main__':
 
     with open("bSKt_hll.txt", "w") as file:
         file.write("Top 25 Estimates:\n")
-        for i, (est, act) in enumerate(sorted_estimates[:25]):
+        for i, (est, act) in enumerate(sorted_estimates):
             file.write(f"Rank {i+1:<3} Actual: {act:<5} Estimated: {est:<5} \n")
